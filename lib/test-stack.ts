@@ -8,5 +8,17 @@ export class TestStack extends Stack {
     super(scope, id, props);
 
     const vpc = new ec2.Vpc(this, 'Vpc', { maxAzs: 1 });
+    const host = new ec2.BastionHostLinux(this, 'bitcoin', {
+      vpc,
+      blockDevices: [{
+        deviceName: '/dev/xvdb',
+        volume: ec2.BlockDeviceVolume.ebs(500, {
+          encrypted: false,
+          volumeType: ec2.EbsDeviceVolumeType.SC1
+        }),
+      }],
+      instanceName: "bitcoin-full-node",
+      instanceType: ec2.InstanceType.of(ec2.InstanceClass.BURSTABLE4_GRAVITON, ec2.InstanceSize.SMALL)
+    });
   }
 }
