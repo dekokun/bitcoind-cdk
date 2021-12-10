@@ -8,6 +8,8 @@ export class TestStack extends Stack {
     super(scope, id, props);
 
     const vpc = new ec2.Vpc(this, 'Vpc', { maxAzs: 1 });
+    const sg = new ec2.SecurityGroup(this, 'securitygroup', { vpc, allowAllOutbound: true });
+    sg.addIngressRule(ec2.Peer.anyIpv4(), ec2.Port.tcp(8443), 'allow bitcoin access from the world');
     const host = new ec2.BastionHostLinux(this, 'bitcoin', {
       vpc,
       blockDevices: [{
@@ -17,6 +19,7 @@ export class TestStack extends Stack {
           volumeType: ec2.EbsDeviceVolumeType.SC1
         }),
       }],
+      securityGroup: sg,
       instanceName: "bitcoin-full-node",
       instanceType: ec2.InstanceType.of(ec2.InstanceClass.BURSTABLE4_GRAVITON, ec2.InstanceSize.SMALL)
     });
