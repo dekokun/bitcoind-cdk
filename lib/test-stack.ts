@@ -1,6 +1,8 @@
 import { Stack, StackProps } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import { aws_ec2 as ec2 } from 'aws-cdk-lib';
+import { aws_elasticloadbalancingv2 as elbv2 } from 'aws-cdk-lib';
+import { aws_elasticloadbalancingv2_targets as elbv2_t } from 'aws-cdk-lib';
 // import * as sqs from 'aws-cdk-lib/aws-sqs';
 
 export class TestStack extends Stack {
@@ -23,5 +25,10 @@ export class TestStack extends Stack {
       instanceName: "bitcoin-full-node",
       instanceType: ec2.InstanceType.of(ec2.InstanceClass.BURSTABLE4_GRAVITON, ec2.InstanceSize.LARGE)
     });
+
+    const lb = new elbv2.NetworkLoadBalancer(this, 'lb', { vpc, internetFacing: true });
+    const listener = lb.addListener('listener', { port: 8443 });;
+    const instanceTarget = new elbv2_t.InstanceTarget(host.instance);
+    listener.addTargets('target', { port: 8443, targets: [instanceTarget]});
   }
 }
