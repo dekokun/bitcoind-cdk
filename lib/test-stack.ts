@@ -11,7 +11,8 @@ export class TestStack extends Stack {
 
     const vpc = new ec2.Vpc(this, 'Vpc', { maxAzs: 1 });
     const sg = new ec2.SecurityGroup(this, 'securitygroup', { vpc, allowAllOutbound: true });
-    sg.addIngressRule(ec2.Peer.anyIpv4(), ec2.Port.tcp(8443), 'allow bitcoin access from the world');
+    const bitcoinPort = 8443;
+    sg.addIngressRule(ec2.Peer.anyIpv4(), ec2.Port.tcp(bitcoinPort), 'allow bitcoin access from the world');
     const host = new ec2.BastionHostLinux(this, 'bitcoin', {
       vpc,
       blockDevices: [{
@@ -27,8 +28,7 @@ export class TestStack extends Stack {
     });
 
     const lb = new elbv2.NetworkLoadBalancer(this, 'lb', { vpc, internetFacing: true });
-    const listener = lb.addListener('listener', { port: 8443 });;
-    const instanceTarget = new elbv2_t.InstanceTarget(host.instance);
-    listener.addTargets('target', { port: 8443, targets: [instanceTarget]});
+    const listener = lb.addListener('listener', { port: bitcoinPort });;
+    listener.addTargets('target', { port: bitcoinPort, targets: [new elbv2_t.InstanceTarget(host.instance)]});
   }
 }
