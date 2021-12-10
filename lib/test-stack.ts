@@ -11,7 +11,7 @@ export class TestStack extends Stack {
 
     const vpc = new ec2.Vpc(this, 'Vpc', { maxAzs: 1 });
     const sg = new ec2.SecurityGroup(this, 'securitygroup', { vpc, allowAllOutbound: true });
-    const bitcoinPort = 8443;
+    const bitcoinPort = 8333;
     sg.addIngressRule(ec2.Peer.anyIpv4(), ec2.Port.tcp(bitcoinPort), 'allow bitcoin access from the world');
     const host = new ec2.BastionHostLinux(this, 'bitcoin', {
       vpc,
