@@ -26,9 +26,22 @@ export class TestStack extends Stack {
       instanceName: "bitcoin-full-node",
       instanceType: ec2.InstanceType.of(ec2.InstanceClass.BURSTABLE4_GRAVITON, ec2.InstanceSize.LARGE)
     });
+    const host2 = new ec2.BastionHostLinux(this, 'bitcoin-ssd', {
+      vpc,
+      blockDevices: [{
+        deviceName: '/dev/xvdb',
+        volume: ec2.BlockDeviceVolume.ebs(500, {
+          encrypted: false,
+          volumeType: ec2.EbsDeviceVolumeType.GP3
+        }),
+      }],
+      instanceName: "bitcoin-full-node-ssd",
+      securityGroup: sg,
+      instanceType: ec2.InstanceType.of(ec2.InstanceClass.BURSTABLE4_GRAVITON, ec2.InstanceSize.LARGE)
+    });
 
     const lb = new elbv2.NetworkLoadBalancer(this, 'lb', { vpc, internetFacing: true });
     const listener = lb.addListener('listener', { port: bitcoinPort });;
-    listener.addTargets('target', { port: bitcoinPort, targets: [new elbv2_t.InstanceTarget(host.instance)]});
+    listener.addTargets('target', { port: bitcoinPort, targets: [new elbv2_t.InstanceTarget(host2.instance)]});
   }
 }
