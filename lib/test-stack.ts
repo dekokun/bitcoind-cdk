@@ -3,7 +3,6 @@ import { Construct } from 'constructs';
 import { aws_ec2 as ec2 } from 'aws-cdk-lib';
 import { aws_elasticloadbalancingv2 as elbv2 } from 'aws-cdk-lib';
 import { aws_elasticloadbalancingv2_targets as elbv2_t } from 'aws-cdk-lib';
-// import * as sqs from 'aws-cdk-lib/aws-sqs';
 
 export class TestStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
