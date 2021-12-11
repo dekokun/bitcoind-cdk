@@ -17,9 +17,10 @@ export class TestStack extends Stack {
       vpc,
       blockDevices: [{
         deviceName: '/dev/xvdb',
-        volume: ec2.BlockDeviceVolume.ebs(500, {
-          encrypted: false,
-          volumeType: ec2.EbsDeviceVolumeType.SC1
+        // snapshot from instance that complete IBDs.
+        volume: ec2.BlockDeviceVolume.ebsFromSnapshot('snap-0da80e3b5ee58be22', {
+          volumeType: ec2.EbsDeviceVolumeType.SC1,
+          volumeSize: 500
         }),
       }],
       securityGroup: sg,
