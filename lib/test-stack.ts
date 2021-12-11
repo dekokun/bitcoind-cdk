@@ -3,6 +3,8 @@ import { Construct } from 'constructs';
 import { aws_ec2 as ec2 } from 'aws-cdk-lib';
 import { aws_elasticloadbalancingv2 as elbv2 } from 'aws-cdk-lib';
 import { aws_elasticloadbalancingv2_targets as elbv2_t } from 'aws-cdk-lib';
+import { aws_route53 as r53 } from 'aws-cdk-lib';
+import { aws_route53_targets as r53_t } from 'aws-cdk-lib';
 
 export class TestStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
@@ -30,5 +32,8 @@ export class TestStack extends Stack {
     const lb = new elbv2.NetworkLoadBalancer(this, 'lb', { vpc, internetFacing: true });
     const listener = lb.addListener('listener', { port: bitcoinPort });;
     listener.addTargets('target', { port: bitcoinPort, targets: [new elbv2_t.InstanceTarget(host.instance)]});
+
+    let hostedZone = r53.HostedZone.fromHostedZoneAttributes(this, 'dekokun.info', { hostedZoneId: 'Z1SC2QTMQPRZLB', zoneName: 'dekokun.info'});
+    new r53.ARecord(this, 'bitcoin.dekokun.info', {zone: hostedZone, recordName: 'bitcoin.dekokun.info', target: r53.RecordTarget.fromAlias(new r53_t.LoadBalancerTarget(lb))})
   }
 }
