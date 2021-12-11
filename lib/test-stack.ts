@@ -25,7 +25,7 @@ export class TestStack extends Stack {
       }],
       securityGroup: sg,
       instanceName: "bitcoin-full-node",
-      instanceType: ec2.InstanceType.of(ec2.InstanceClass.BURSTABLE4_GRAVITON, ec2.InstanceSize.SMALL)
+      instanceType: ec2.InstanceType.of(ec2.InstanceClass.BURSTABLE4_GRAVITON, ec2.InstanceSize.MICRO)
     });
 
     const lb = new elbv2.NetworkLoadBalancer(this, 'lb', { vpc, internetFacing: true });
