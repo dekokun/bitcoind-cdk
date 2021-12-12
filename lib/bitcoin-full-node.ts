@@ -6,7 +6,7 @@ import { aws_elasticloadbalancingv2_targets as elbv2_t } from 'aws-cdk-lib';
 import { aws_route53 as r53 } from 'aws-cdk-lib';
 import { aws_route53_targets as r53_t } from 'aws-cdk-lib';
 
-export class TestStack extends Stack {
+export class BitcoinFullNodeStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
 
