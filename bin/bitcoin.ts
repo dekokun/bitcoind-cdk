@@ -4,6 +4,6 @@ import * as cdk from 'aws-cdk-lib';
 import { BitcoinFullNodeStack } from '../lib/bitcoin-full-node';
 
 const app = new cdk.App();
-new BitcoinFullNodeStack(app, 'TestStack', {
+new BitcoinFullNodeStack(app, 'BitcoinFullNode', {
   env: { account: process.env.CDK_DEFAULT_ACCOUNT, region: process.env.CDK_DEFAULT_REGION },
 });
