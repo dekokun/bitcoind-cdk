@@ -1,10 +1,7 @@
 import { Stack, StackProps } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import { aws_ec2 as ec2 } from 'aws-cdk-lib';
-import { aws_elasticloadbalancingv2 as elbv2 } from 'aws-cdk-lib';
-import { aws_elasticloadbalancingv2_targets as elbv2_t } from 'aws-cdk-lib';
 import { aws_route53 as r53 } from 'aws-cdk-lib';
-import { aws_route53_targets as r53_t } from 'aws-cdk-lib';
 
 export class BitcoinFullNodeStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
